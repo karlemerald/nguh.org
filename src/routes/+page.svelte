@@ -171,8 +171,7 @@
         start_game={StartGame}
     />
 {:else if render_state}
-    <Stripe>Hunger Games Simulator</Stripe>
-    <h3>{render_state.game_title}</h3>
+    <Stripe>{render_state.game_title}</Stripe>
     <section class="mt-8">
         <div>
             {#if render_state.is(RenderState.ROUND_EVENTS)}
@@ -184,7 +183,7 @@
                     />
                 {/each}
             {:else if render_state.is(RenderState.ROUND_DEATHS)}
-                <p class="text-center mb-12">
+                <p class="cannon-message  mb-12">
                     {#if render_state.has_deaths}
                         {render_state.deaths} cannon shot{render_state.deaths === 1 ? '' : 's'}
                         can be heard in the distance.
@@ -274,5 +273,12 @@
     #abort-game {
         width: 12rem;
         margin: 0;
+    }
+
+    .cannon-message {
+        text-align: center;
+        transform: translateY(-2rem);
+        font-size: 2.5rem;
+        font-family: "Lucida Console", "Courier New", monospace
     }
 </style>

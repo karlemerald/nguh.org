@@ -30,27 +30,10 @@ h2:first-of-type { margin-bottom: 1rem; }
 
 #changelog-dialog { max-width: min(90rem, 100vw); }
 
-.image-wrapper {
-    position: relative;
-    aspect-ratio: 1 / 1;
-    background: url('$lib/images/tributeBG.png') center / cover no-repeat;
-
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-
-    margin-left: 1rem;
-    margin-right: 1rem;
-    border: 3px ridge var(--accentcolour);
-    width: 13.5rem;
-    height: 13.5rem;
-}
-
+.image-wrapper,
 .tribute-dead-image-wrapper {
     position: relative;
     aspect-ratio: 1 / 1;
-    background: url('$lib/images/tributeBG.png') center / cover no-repeat;
 
     display: flex;
     text-align: center;
@@ -62,8 +45,19 @@ h2:first-of-type { margin-bottom: 1rem; }
     border: 3px ridge var(--accentcolour);
     width: 13.5rem;
     height: 13.5rem;
-    filter: grayscale(100%)
+
+    &::before {
+        position: absolute;
+        inset: 0;
+        content: '';
+        background: url('$lib/images/tributeBG.png') center / cover no-repeat;
+        z-index: 0;
+    }
+
+    &:has(> .tribute-image[src=""])::before { opacity: .5; }
 }
+
+.tribute-dead-image-wrapper { filter: grayscale(100%); }
 
 .tribute-image {
     aspect-ratio: 1 / 1;

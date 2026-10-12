@@ -16,6 +16,7 @@
         <div class="flex flex-col items-center gap-2">
             <TributeImage {tribute} {grey_if_dead} />
             <Message parts={[tribute.name]}/>
+            <p>From: {tribute.district?.trim() || 'Unassigned'}</p>
             <p>Kills: {tribute.kills}</p>
             <p>
                 {#if tribute.died_in_round !== undefined}
