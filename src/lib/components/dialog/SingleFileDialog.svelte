@@ -82,6 +82,7 @@
 <style lang="scss">
     .file-input-control {
         gap: .55rem;
+        background-color: white;
         button { width: 11.5rem; }
         input[type=file] { display: none; }
         input[type=text] {

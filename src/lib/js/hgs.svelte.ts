@@ -163,6 +163,9 @@ export interface TributeCharacterSelectOptions {
     pronoun_option: PronounSetting
     image_url?: string
     district?: string
+    crop_x?: number
+    crop_y?: number
+    crop_zoom?: number
 }
 
 /** The options passed to the `Tribute` constructor. */
@@ -172,6 +175,9 @@ export interface TributeOptions {
     plural: boolean
     image: string
     district?: string
+    crop_x?: number
+    crop_y?: number
+    crop_zoom?: number
     tags?: Tag[]
 }
 
@@ -199,6 +205,9 @@ export class Tribute {
     readonly image_src: string
     readonly plural: boolean
     readonly district?: string
+    readonly crop_x: number
+    readonly crop_y: number
+    readonly crop_zoom: number
     kills: number
     died_in_round: GameRound | undefined
     __tags: Tag[]
@@ -211,6 +220,9 @@ export class Tribute {
         this.image_src = options.image ?? ''
         this.plural = options.plural ?? false
         this.district = options.district?.trim() || undefined
+        this.crop_x = options.crop_x ?? 50
+        this.crop_y = options.crop_y ?? 50
+        this.crop_zoom = options.crop_zoom ?? 1
         this.kills = 0
         this.__tags = []
         if (options.tags) this.__tags.push(...options.tags)
@@ -298,6 +310,9 @@ export namespace Configuration {
             gender_select: string
             custom_pronouns: string
             district?: string
+            crop_x?: number
+            crop_y?: number
+            crop_zoom?: number
             image?: string
         }
 
@@ -333,7 +348,7 @@ export namespace Configuration {
          * This function is only async because it is async in later config versions.
          **/
         export async function LoadCharacters(data: CharacterConfig): Promise<TributeCharacterSelectOptions[]> {
-            return data.characters.map(({ name, custom_pronouns, gender_select, district, image }) => {
+            return data.characters.map(({ name, custom_pronouns, gender_select, district, crop_x, crop_y, crop_zoom, image }) => {
                 // Load the image from a URL if it’s not a blob. Old versions of the simulator
                 // would produce URLs ending in ‘[object%20Object]’ for some reason. Ignore those.
                 let image_url: string | undefined = undefined
@@ -348,6 +363,9 @@ export namespace Configuration {
                     custom_pronouns,
                     pronoun_option: gender_select as PronounSetting,
                     district,
+                    crop_x,
+                    crop_y,
+                    crop_zoom,
                     image_url
                 }
             })
@@ -385,6 +403,9 @@ export namespace Configuration {
             gender_select: string
             pronoun_str: string
             district?: string
+            crop_x?: number
+            crop_y?: number
+            crop_zoom?: number
             image?: StoredTributeImage
             tags: Tag[]
         }
@@ -445,7 +466,7 @@ export namespace Configuration {
 
         /** Load characters from a file. **/
         export async function LoadCharacters(data: CharacterConfig): Promise<TributeCharacterSelectOptions[]> {
-            return await Promise.all(data.characters.map(async ({ name, gender_select, pronoun_str, district, image }) => {
+            return await Promise.all(data.characters.map(async ({ name, gender_select, pronoun_str, district, crop_x, crop_y, crop_zoom, image }) => {
                 let image_url: string | undefined = undefined
                 if (typeof image === 'object') {
                     // Image is a URL.
@@ -468,6 +489,9 @@ export namespace Configuration {
                     custom_pronouns: pronoun_str,
                     pronoun_option: gender_select as PronounSetting,
                     district,
+                    crop_x,
+                    crop_y,
+                    crop_zoom,
                     image_url
                 }
             }))
@@ -630,7 +654,7 @@ export namespace Configuration {
      * @throws Error if we can’t serialise a character.
      **/
     export async function SerialiseCharacters(tributes: TributeCharacterSelectOptions[]): Promise<V1.StoredTributeOptions[]> {
-        return Promise.all(tributes.map(async ({name, custom_pronouns, pronoun_option, district, image_url}) => {
+        return Promise.all(tributes.map(async ({name, custom_pronouns, pronoun_option, district, crop_x, crop_y, crop_zoom, image_url}) => {
             // Image.
             let image: V1.StoredTributeImage | undefined = undefined
 
@@ -651,6 +675,9 @@ export namespace Configuration {
                 gender_select: pronoun_option,
                 pronoun_str: custom_pronouns ?? '',
                 district: district?.trim() || undefined,
+                crop_x,
+                crop_y,
+                crop_zoom,
                 image: image,
                 tags: [],
             }
@@ -1419,6 +1446,9 @@ export class Game {
                 plural: pronouns.plural,
                 district: character.district,
                 image: character.image_url ?? '',
+                crop_x: character.crop_x,
+                crop_y: character.crop_y,
+                crop_zoom: character.crop_zoom,
                 tags: []
             })
         }))
