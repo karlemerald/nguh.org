@@ -195,7 +195,11 @@
                 {#each render_state.tributes_died as tribute}
                     <Card
                         tributes={[tribute]}
-                        message={[tribute.name, ' has died this round.']}
+                        message={[
+                            tribute.name,
+                            tribute.district?.trim() ? ` from the ${tribute.district.trim()} District` : '',
+                            ' has died this round.'
+                        ]}
                         grey_if_dead={render_state.greyscale_settings.end_of_day_summary}
                     />
                 {/each}

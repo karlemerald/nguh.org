@@ -130,12 +130,13 @@
                     </div>
 
                     <div class="flex">
-                        <label>District:</label>
-                       
+                        <label for="district-{i}">District:</label>
                         <input
-                            name="character"
+                            id="district-{i}"
+                            name="district"
+                            placeholder="Unassigned"
                             type="text"
-                            bind:value={tribute.district_id}
+                            bind:value={tribute.district}
                         >
                     </div>
 

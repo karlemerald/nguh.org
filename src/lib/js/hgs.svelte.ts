@@ -162,8 +162,7 @@ export interface TributeCharacterSelectOptions {
     custom_pronouns?: string
     pronoun_option: PronounSetting
     image_url?: string
-    district_id?: string
-    no_district: boolean
+    district?: string
 }
 
 /** The options passed to the `Tribute` constructor. */
@@ -172,7 +171,7 @@ export interface TributeOptions {
     pronouns?: TributePronouns
     plural: boolean
     image: string
-    district: string
+    district?: string
     tags?: Tag[]
 }
 
@@ -199,6 +198,7 @@ export class Tribute {
     readonly uses_pronouns: boolean
     readonly image_src: string
     readonly plural: boolean
+    readonly district?: string
     kills: number
     died_in_round: GameRound | undefined
     __tags: Tag[]
@@ -210,6 +210,7 @@ export class Tribute {
         if (this.uses_pronouns) this.pronouns = {...options.pronouns!!}
         this.image_src = options.image ?? ''
         this.plural = options.plural ?? false
+        this.district = options.district?.trim() || undefined
         this.kills = 0
         this.__tags = []
         if (options.tags) this.__tags.push(...options.tags)
@@ -296,6 +297,7 @@ export namespace Configuration {
             name: string
             gender_select: string
             custom_pronouns: string
+            district?: string
             image?: string
         }
 
@@ -331,7 +333,7 @@ export namespace Configuration {
          * This function is only async because it is async in later config versions.
          **/
         export async function LoadCharacters(data: CharacterConfig): Promise<TributeCharacterSelectOptions[]> {
-            return data.characters.map(({ name, custom_pronouns, gender_select, image }) => {
+            return data.characters.map(({ name, custom_pronouns, gender_select, district, image }) => {
                 // Load the image from a URL if it’s not a blob. Old versions of the simulator
                 // would produce URLs ending in ‘[object%20Object]’ for some reason. Ignore those.
                 let image_url: string | undefined = undefined
@@ -345,6 +347,7 @@ export namespace Configuration {
                     name,
                     custom_pronouns,
                     pronoun_option: gender_select as PronounSetting,
+                    district,
                     image_url
                 }
             })
@@ -381,6 +384,7 @@ export namespace Configuration {
             name: string
             gender_select: string
             pronoun_str: string
+            district?: string
             image?: StoredTributeImage
             tags: Tag[]
         }
@@ -441,7 +445,7 @@ export namespace Configuration {
 
         /** Load characters from a file. **/
         export async function LoadCharacters(data: CharacterConfig): Promise<TributeCharacterSelectOptions[]> {
-            return await Promise.all(data.characters.map(async ({ name, gender_select, pronoun_str, image }) => {
+            return await Promise.all(data.characters.map(async ({ name, gender_select, pronoun_str, district, image }) => {
                 let image_url: string | undefined = undefined
                 if (typeof image === 'object') {
                     // Image is a URL.
@@ -463,6 +467,7 @@ export namespace Configuration {
                     name,
                     custom_pronouns: pronoun_str,
                     pronoun_option: gender_select as PronounSetting,
+                    district,
                     image_url
                 }
             }))
@@ -625,7 +630,7 @@ export namespace Configuration {
      * @throws Error if we can’t serialise a character.
      **/
     export async function SerialiseCharacters(tributes: TributeCharacterSelectOptions[]): Promise<V1.StoredTributeOptions[]> {
-        return Promise.all(tributes.map(async ({name, custom_pronouns, pronoun_option, image_url}) => {
+        return Promise.all(tributes.map(async ({name, custom_pronouns, pronoun_option, district, image_url}) => {
             // Image.
             let image: V1.StoredTributeImage | undefined = undefined
 
@@ -645,6 +650,7 @@ export namespace Configuration {
                 name,
                 gender_select: pronoun_option,
                 pronoun_str: custom_pronouns ?? '',
+                district: district?.trim() || undefined,
                 image: image,
                 tags: [],
             }
@@ -1411,7 +1417,7 @@ export class Game {
                 pronouns: pronouns.pronouns,
                 uses_pronouns: pronouns.uses_pronouns,
                 plural: pronouns.plural,
-                district: character.district_id ?? '',
+                district: character.district,
                 image: character.image_url ?? '',
                 tags: []
             })
