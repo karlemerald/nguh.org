@@ -47,6 +47,24 @@ h2:first-of-type { margin-bottom: 1rem; }
     height: 13.5rem;
 }
 
+.tribute-dead-image-wrapper {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background: url('$lib/images/tributeBG.png') center / cover no-repeat;
+
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+
+    margin-left: 1rem;
+    margin-right: 1rem;
+    border: 3px ridge var(--accentcolour);
+    width: 13.5rem;
+    height: 13.5rem;
+    filter: grayscale(100%)
+}
+
 .tribute-image {
     aspect-ratio: 1 / 1;
     object-fit: cover;

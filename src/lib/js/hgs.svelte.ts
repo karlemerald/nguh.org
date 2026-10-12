@@ -162,6 +162,8 @@ export interface TributeCharacterSelectOptions {
     custom_pronouns?: string
     pronoun_option: PronounSetting
     image_url?: string
+    district_id?: string
+    no_district: boolean
 }
 
 /** The options passed to the `Tribute` constructor. */
@@ -170,6 +172,7 @@ export interface TributeOptions {
     pronouns?: TributePronouns
     plural: boolean
     image: string
+    district: string
     tags?: Tag[]
 }
 
@@ -1408,6 +1411,7 @@ export class Game {
                 pronouns: pronouns.pronouns,
                 uses_pronouns: pronouns.uses_pronouns,
                 plural: pronouns.plural,
+                district: character.district_id ?? '',
                 image: character.image_url ?? '',
                 tags: []
             })

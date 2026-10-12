@@ -11,7 +11,7 @@
     import Changelog from "$lib/components/hgs/Changelog.svelte";
     import SettingsDialog from '$lib/components/hgs/SettingsDialog.svelte';
     import {Err} from '$lib/js/dialog.svelte';
-
+    import Checkbox from '$lib/components/Checkbox.svelte';
     interface Props {
         tributes: TributeCharacterSelectOptions[]
         start_game: () => void
@@ -126,6 +126,16 @@
                             name="character"
                             type="text"
                             bind:value={tribute.name}
+                        >
+                    </div>
+
+                    <div class="flex">
+                        <label>District:</label>
+                       
+                        <input
+                            name="character"
+                            type="text"
+                            bind:value={tribute.district_id}
                         >
                     </div>
 
