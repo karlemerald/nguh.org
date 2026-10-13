@@ -17,6 +17,7 @@
     import Message from '$lib/components/hgs/Message.svelte';
     import Card from '$lib/components/hgs/Card.svelte';
     import TributeStatList from '$lib/components/hgs/TributeStatList.svelte';
+    import DistrictRoster from '$lib/components/hgs/DistrictRoster.svelte';
     import {db} from './db';
     import {Err, Prompt} from '$lib/js/dialog.svelte';
 
@@ -171,7 +172,11 @@
         start_game={StartGame}
     />
 {:else if render_state}
-    <Stripe>{render_state.game_title}</Stripe>
+    {#if render_state.is(RenderState.DISTRICT_ROSTER)}
+        <p class="district-roster-message  mb-12">{render_state.game_title}</p>
+    {:else}
+        <Stripe>{render_state.game_title}</Stripe>
+    {/if}
     <section class="mt-8">
         <div>
             {#if render_state.is(RenderState.ROUND_EVENTS)}
@@ -241,6 +246,19 @@
                         grey_if_dead={render_state.greyscale_settings.end_of_game_summary}
                     />
                 {/if}
+            {:else if render_state.is(RenderState.DISTRICT_ROSTER)}
+                {#if render_state.has_alive}
+                    <DistrictRoster tributes={render_state.tributes_alive} />
+                {/if}
+                {#if render_state.has_deaths}
+                    {#if render_state.has_alive}
+                        <h3 class="mt-24 mb-8 ml-auto mr-auto">The Rest</h3>
+                    {/if}
+                    <DistrictRoster
+                        tributes={render_state.tributes_died.toReversed()}
+                        grey_if_dead={render_state.greyscale_settings.end_of_game_summary}
+                    />
+                {/if}
             {:else}
                 <p>Internal Error: Invalid render state</p>
             {/if}
@@ -279,6 +297,14 @@
         text-align: center;
         transform: translateY(-2rem);
         font-size: 2.5rem;
+        font-family: "Lucida Console", "Courier New", monospace
+    }
+
+    .district-roster-message {
+        text-align: center;
+        transform: translateY(3.5rem);
+        font-size: 2.5rem;
+        height: 8rem;
         font-family: "Lucida Console", "Courier New", monospace
     }
 </style>

@@ -923,7 +923,8 @@ export const enum GameState {
     END_SUMMARY_FATALITIES,
     END_SUMMARY_STATS,
     END,
-    INITIAL = NEW_ROUND,
+    DISTRICT_ROSTER,
+    INITIAL = DISTRICT_ROSTER,
 }
 
 /** The render state of the game. */
@@ -933,6 +934,7 @@ export const enum RenderState {
     ROUND_DEATHS,
     WINNERS,
     GAME_DEATHS,
+    DISTRICT_ROSTER,
     STATS,
 }
 
@@ -1140,7 +1142,7 @@ export class Game {
         const state = this.#TickRenderState()
 
         // Advance the state and perform and action accordingly.
-        switch (this.#state) {
+        switch (this.#state) { 
             case GameState.NEW_ROUND:
                 this.#state = GameState.IN_ROUND
                 this.#StartNewRound()
@@ -1177,6 +1179,11 @@ export class Game {
                 break
 
             case GameState.END:
+                break
+
+            case GameState.DISTRICT_ROSTER:
+                this.#game_title = 'WELCOME, HERE ARE THE DISTRICTS.'
+                this.#state = GameState.NEW_ROUND
                 break
 
             default:
@@ -1417,6 +1424,9 @@ export class Game {
 
             case GameState.END_SUMMARY_STATS:
                 return RenderState.STATS
+
+            case GameState.DISTRICT_ROSTER:
+                return RenderState.DISTRICT_ROSTER
 
             case GameState.DEAD:
             case GameState.END:

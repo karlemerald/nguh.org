@@ -199,14 +199,9 @@
     >
         {@render children?.()}
         <footer
-            class='justify-end text-center pb-2 mt-4'
+            class='justify-end text-center pb-2 mt--5'
         >
-            <hr
-                style='border: 2px solid var(--accentcolour);'
-                class='w-4/5 m-auto mb-2'
-            >
-            For more information, see the YouTube channel
-            <a href="https://www.youtube.com/@AgmaSchwa"><strong>Agma&nbsp;Schwa</strong></a>
+            
         </footer>
     </main>
 </div>
