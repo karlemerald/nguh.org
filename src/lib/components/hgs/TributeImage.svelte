@@ -15,6 +15,7 @@
             alt="{tribute.raw_name}"
             class="tribute-image"
             src="{tribute.image_src}"
+            style="object-fit: contain; translate: {50 - tribute.crop_x}% {50 - tribute.crop_y}%; transform: scale({tribute.crop_zoom})"
         >
     </div>
 </div>

@@ -1,5 +1,6 @@
 <script lang="ts">
     import Stripe from "$lib/components/Stripe.svelte";
+    import Dialog from "$lib/components/dialog/Dialog.svelte";
     import {
         Configuration,
         DownloadURL, type EventList,
@@ -23,6 +24,27 @@
     let load_characters_dialog: SingleFileDialog
     let upload_images_dialog: MultiFileDialog
     let settings_dialog: SettingsDialog
+    let crop_dialog: Dialog
+    let editing_tribute: TributeCharacterSelectOptions | undefined = $state(undefined)
+    let draft_crop_x = $state(50)
+    let draft_crop_y = $state(50)
+    let draft_crop_zoom = $state(1)
+
+    function EditCrop(tribute: TributeCharacterSelectOptions) {
+        editing_tribute = tribute
+        draft_crop_x = tribute.crop_x ?? 50
+        draft_crop_y = tribute.crop_y ?? 50
+        draft_crop_zoom = tribute.crop_zoom ?? 1
+        crop_dialog.open().ignore_cancellation()
+    }
+
+    function ApplyCrop() {
+        if (!editing_tribute) return
+        editing_tribute.crop_x = draft_crop_x
+        editing_tribute.crop_y = draft_crop_y
+        editing_tribute.crop_zoom = draft_crop_zoom
+        crop_dialog.resolve()
+    }
 
     /** Prompt the user for an image src to use for an <img>. */
     function GetImage(tribute: TributeCharacterSelectOptions) {
@@ -88,6 +110,48 @@
     description='Click below to select multiple files to add them as tributes.'
     type='raw'
 />
+
+<Dialog bind:this={crop_dialog} title="Edit portrait crop">
+    {#snippet content()}
+        <div class="crop-editor">
+            <div class="crop-preview">
+                <img
+                    src={editing_tribute?.image_url ?? ''}
+                    alt="Portrait crop preview"
+                    style="object-fit: contain; translate: {50 - draft_crop_x}% {50 - draft_crop_y}%; transform: scale({draft_crop_zoom})"
+                >
+            </div>
+            <label>
+                Horizontal position: {draft_crop_x}%
+                <input type="range" min="-100" max="200" bind:value={draft_crop_x}>
+            </label>
+            <label>
+                Vertical position: {draft_crop_y}%
+                <input type="range" min="-100" max="200" bind:value={draft_crop_y}>
+            </label>
+            <label>
+                Zoom: {draft_crop_zoom.toFixed(2)}×
+                <input type="range" min="0.5" max="5" step="0.01" bind:value={draft_crop_zoom}>
+            </label>
+        </div>
+
+        <div class="crop-centering-controls">
+            <button type="button" onclick={() => draft_crop_x = 50}>Center X</button>
+            <button type="button" onclick={() => draft_crop_y = 50}>Center Y</button>
+            <button
+                type="button"
+                onclick={() => {
+                    draft_crop_x = 50;
+                    draft_crop_y = 50;
+                }}
+            >Center</button>
+        </div>
+    {/snippet}
+    {#snippet controls()}
+        <button onclick={ApplyCrop}>Apply</button>
+        <button onclick={() => crop_dialog.reject()}>Cancel</button>
+    {/snippet}
+</Dialog>
 
 <SettingsDialog bind:this={settings_dialog} bind:event_list />
 
@@ -178,8 +242,12 @@
                         class="non-previewable-icon tribute-image"
                         src={tribute.image_url ?? ''}
                         onclick={() => GetImage(tribute)}
+                        style="object-fit: contain; translate: {50 - (tribute.crop_x ?? 50)}% {50 - (tribute.crop_y ?? 50)}%; transform: scale({tribute.crop_zoom ?? 1})"
                     >
                 </div>
+                <button type="button" disabled={!tribute.image_url} onclick={() => EditCrop(tribute)}>
+                    Edit crop
+                </button>
             </form>
         {/each}
 
@@ -242,5 +310,34 @@
             margin-right: 1rem;
             width: 6rem;
         }
+    }
+    .crop-editor {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-width: min(18rem, 70vw);
+
+        label { display: flex; flex-direction: column; gap: .25rem; }
+        input[type="range"] { width: 100%; }
+    }
+
+    .crop-preview {
+        width: min(18rem, 70vw);
+        aspect-ratio: 1;
+        overflow: hidden;
+        background: black;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transform-origin: center;
+        }
+    }
+    .crop-centering-controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: .5rem;
     }
 </style>

@@ -34,6 +34,7 @@ h2:first-of-type { margin-bottom: 1rem; }
 .tribute-dead-image-wrapper {
     position: relative;
     aspect-ratio: 1 / 1;
+    overflow: hidden;
 
     display: flex;
     text-align: center;
