@@ -189,6 +189,7 @@
                         <input
                             name="character"
                             type="text"
+                            class="tribute-name"
                             bind:value={tribute.name}
                         >
                     </div>

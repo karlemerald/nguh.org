@@ -165,23 +165,20 @@
 <div id='h1-wrapper' class='absolute w-full flex flex-col items-center justify-center'>
     <div class='mx-auto'>
         <h1
-            style='text-shadow: -3px 3px rgba(0, 0, 0, .8);'
+            style='text-shadow: -5px 5px rgba(0, 0, 0, .8);'
+            class:galorian-games-title={$page_title === 'The Galorian Hunger Games'}
             class='
                 p-0 block
                 font-black text-center
                 text-white
                 sm:text-[3rem]
-                md:text-[4rem]
+                md:text-[3rem]
                 md:text-nowrap
                 uppercase
             '
         >
             {$page_title === 'Agma Schwa' ? 'Welcome!' : $page_title}
         </h1>
-        <hr
-            style='border: var(--h1-underline-height) solid var(--accentlight);'
-            class='m-auto -mt-3 w-3/4'
-        >
     </div>
 </div>
 
@@ -212,6 +209,12 @@
         height: var(--banner-height);
     }
 
+    .galorian-games-title {
+        font-family: Plaza, sans-serif;
+        font-size: 3.5rem;
+        letter-spacing: 0.6rem;
+    }
+
     :global(body.page-hide-banner #h1-wrapper) {
         display: none !important;
     }
@@ -219,6 +222,12 @@
     @media (max-width: 900px) {
         :root {
             --h1-underline-height: .35rem;
+        }
+    }
+
+    @media (min-width: 640px) {
+        .galorian-games-title {
+            font-size: 6rem;
         }
     }
 

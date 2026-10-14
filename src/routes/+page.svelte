@@ -158,7 +158,7 @@
     }
 </script>
 
-<Page name="Hunger Games Simulator" theme="dark"/>
+<Page name="The Galorian Hunger Games" theme="dark"/>
 
 <svelte:head>
     <!-- FIXME: Extract metadata to separate component  -->

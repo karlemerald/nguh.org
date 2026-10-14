@@ -5,6 +5,7 @@
         height: var(--banner-height);
         box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, .25), 0 2px 1rem black;
         background-repeat: no-repeat;
+        background-position: center;
         background-size: cover;
         background-image: url("$lib/images/banner.jpg")
     }
