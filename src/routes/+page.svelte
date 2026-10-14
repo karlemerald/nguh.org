@@ -239,7 +239,9 @@
                 {/if}
                 {#if render_state.has_deaths}
                     {#if render_state.has_alive}
-                        <h3 class="mt-24 mb-8 ml-auto mr-auto">The Rest</h3>
+                        <div class="stats-rest-stripe">
+                            <Stripe tight>The Rest</Stripe>
+                        </div>
                     {/if}
                     <TributeStatList
                         tributes={render_state.tributes_died.toReversed()}
@@ -247,18 +249,7 @@
                     />
                 {/if}
             {:else if render_state.is(RenderState.DISTRICT_ROSTER)}
-                {#if render_state.has_alive}
-                    <DistrictRoster tributes={render_state.tributes_alive} />
-                {/if}
-                {#if render_state.has_deaths}
-                    {#if render_state.has_alive}
-                        <h3 class="mt-24 mb-8 ml-auto mr-auto">The Rest</h3>
-                    {/if}
-                    <DistrictRoster
-                        tributes={render_state.tributes_died.toReversed()}
-                        grey_if_dead={render_state.greyscale_settings.end_of_game_summary}
-                    />
-                {/if}
+                <DistrictRoster tributes={render_state.tributes_alive} />
             {:else}
                 <p>Internal Error: Invalid render state</p>
             {/if}
@@ -298,6 +289,18 @@
         transform: translateY(-2rem);
         font-size: 2.5rem;
         font-family: "Lucida Console", "Courier New", monospace
+    }
+
+    :global(.stats-rest-stripe .stripe) {
+        width: calc(100% + 8rem);
+        margin-left: -4rem;
+    }
+
+    @media (max-width: 900px) {
+        :global(.stats-rest-stripe .stripe) {
+            width: calc(100% + 3rem);
+            margin-left: -1.5rem;
+        }
     }
 
     .district-roster-message {

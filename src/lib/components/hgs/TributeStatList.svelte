@@ -14,17 +14,23 @@
 <div class="flex flex-wrap justify-center gap-8">
     {#each tributes as tribute}
         <div class="flex flex-col items-center gap-2">
+            <p>
+                {#if tribute.died_in_round !== undefined}
+                {:else}
+                    <span class="tribute-winner">⭐Winner⭐</span>
+                {/if}
+            </p>
             <TributeImage {tribute} {grey_if_dead} />
             <Message parts={[tribute.name]}/>
             {#if tribute.district?.trim()}
                 <p>From: {tribute.district.trim()}</p>
-            {/if}  
+            {/if}
             <p>Kills: {tribute.kills}</p>
             <p>
                 {#if tribute.died_in_round !== undefined}
                     Died: Round {tribute.died_in_round.index}
                 {:else}
-                    <span class="tribute-winner">⭐Winner⭐</span>
+                    <span class="spacer"></span>
                 {/if}
             </p>
         </div>
@@ -37,5 +43,9 @@
         color: var(--accentlight);
         font-variant: small-caps;
         font-weight: bold;
+    }
+    .spacer {
+        display: block;
+        height: 4rem;
     }
 </style>
