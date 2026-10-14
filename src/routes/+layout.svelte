@@ -208,8 +208,8 @@
 
 <style>
     #h1-wrapper {
-        top: var(--header-height);
-        height: calc(var(--banner-height) - var(--header-height)  - var(--header-offset));
+        top: 0;
+        height: var(--banner-height);
     }
 
     :global(body.page-hide-banner #h1-wrapper) {
@@ -219,14 +219,12 @@
     @media (max-width: 900px) {
         :root {
             --h1-underline-height: .35rem;
-            --header-offset: 2.5rem;
         }
     }
 
     @media (max-width: 650px) {
         :root {
             --h1-underline-height: .2rem;
-            --header-offset: 1.5rem;
         }
     }
 
