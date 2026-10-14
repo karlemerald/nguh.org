@@ -48,6 +48,7 @@
 
     /** End the current game. */
     function EndGame() {
+        window.scrollTo(0, 0)
         game = null
         render_state = null
     }
@@ -238,14 +239,10 @@
                     <TributeStatList tributes={render_state.tributes_alive} />
                 {/if}
                 {#if render_state.has_deaths}
-                    {#if render_state.has_alive}
-                        <div class="stats-rest-stripe">
-                            <Stripe tight>The Rest</Stripe>
-                        </div>
-                    {/if}
                     <TributeStatList
                         tributes={render_state.tributes_died.toReversed()}
                         grey_if_dead={render_state.greyscale_settings.end_of_game_summary}
+                        group_by_district
                     />
                 {/if}
             {:else if render_state.is(RenderState.DISTRICT_ROSTER)}
@@ -256,10 +253,16 @@
         </div>
 
         <!-- Buttons. -->
-        <div class="flex justify-end mt-8">
-            <button id="advance-game" class="right-1/2 translate-x-1/2 absolute" onclick={Proceed}>Proceed</button>
-            <button id="abort-game" class="danger-button" onclick={AbortGame}>Abort Game</button>
-        </div>
+        {#if !render_state.is(RenderState.STATS)}
+            <div class="flex justify-end mt-8">
+                <button id="advance-game" class="right-1/2 translate-x-1/2 absolute" onclick={Proceed}>Proceed</button>
+                <button id="abort-game" class="danger-button" onclick={AbortGame}>Abort Game</button>
+            </div>
+        {:else}
+            <div class="flex justify-center mt-8">
+                <button id="end-game" onclick={Proceed}>End Game</button>
+            </div>
+        {/if}
     </section>
 {:else}
     <p>Something went horribly wrong. This is a bug. </p>
@@ -271,6 +274,15 @@
     }
 
     #advance-game, #abort-game {
+        display: block;
+        margin: 0 auto;
+
+        width: 10rem;
+        height: 3rem;
+        font-size: 1.5rem;
+    }
+
+    #end-game {
         display: block;
         margin: 0 auto;
 

@@ -22,7 +22,7 @@ dialog {
     font-size: var(--text-size);
 
     --title-bar-colour: var(--accentlight);
-    --title-bar-text-colour: var(--accentdarker);
+    --title-bar-text-colour: black;
     --svg-button-bg: var(--title-bar-colour);
     --svg-button-hover-bg: var(--accentcolour);
 
@@ -43,7 +43,7 @@ dialog {
     select {
         border: none;
         background-color: var(--accentlight);
-        color: var(--accentdarker);
+        color: black;
         font-size: var(--text-size);
         transition: background-color .5s, color .5s;
 
@@ -55,10 +55,13 @@ dialog {
 
     input {
         color: black;
+        background: white;
+
         &[disabled] { background: lightgrey !important; }
         &[type=number] {
             width: 5rem;
             border: none;
+            background: white;
             font-size: var(--text-size);
         }
     }
@@ -159,7 +162,7 @@ form {
     gap: 1rem;
     flex-direction: column;
 
-    label { margin-bottom: -.75rem; }
+    label { margin-bottom: -.75rem;}
 
     input {
         border: 1px solid var(--accentcolour);

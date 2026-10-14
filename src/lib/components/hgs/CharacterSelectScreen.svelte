@@ -264,11 +264,20 @@
         </div>
     </div>
     <div class="flex justify-center mt-8">
-        <button onclick={start_game}>Start Game</button>
+        <button id='start-game' onclick={start_game}>Start Game</button>
     </div>
 </section>
 
 <style lang="scss">
+    #start-game {
+        display: block;
+        margin: 0 auto;
+
+        width: 10rem;
+        height: 3rem;
+        font-size: 1.5rem;
+    }
+
     #add-character {
         position: absolute;
         inset: 2rem;

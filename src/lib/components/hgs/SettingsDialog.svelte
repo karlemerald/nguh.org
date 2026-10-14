@@ -83,5 +83,6 @@ If specified in percent, this is relative to the total number of tributes, alive
 
     input[type=text], input[type=number] {
         padding-inline: 2px;
+        background-color: white;
     }
 </style>
